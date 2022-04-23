@@ -1,0 +1,36 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+				<ResourceDictionary.MergedDictionaries>
+								<ResourceDictionary>
+												<Color x:Key="AccentColor">#68c760</Color>
+												<SolidColorBrush x:Key="AccentColorBrush" Color="{DynamicResource AccentColor}" />
+												<SolidColorBrush x:Key="FluentForegroundColor" Color="Black" />
+												<SolidColorBrush x:Key="FluentWindowColor" Color="#FFF9F9F9" />
+												<SolidColorBrush x:Key="FluentBackgroundColor" Color="White" />
+												<SolidColorBrush x:Key="FluentFrameColor" Color="#fcfcfc" />
+												<SolidColorBrush x:Key="FluentFrameBorderColor" Color="#10000000" />
+												<SolidColorBrush x:Key="FluentBorderColor" Color="#19000000" />
+
+												<SolidColorBrush x:Key="FluentTrackColor" Color="Gray" />
+
+												<SolidColorBrush x:Key="FluentContextMenuBackground" Color="#fafafa"/>
+												<SolidColorBrush x:Key="FluentMenuItemDisabled" Color="#a7a7a7"/>
+												<SolidColorBrush x:Key="FluentMenuItemHoverColor" Color="#f0f0f0"/>
+
+												<Color x:Key="FluentScrollBarBackground">#fafafa</Color>
+												<SolidColorBrush x:Key="FluentScrollBarForeground" Color="Gray" />
+												<SolidColorBrush x:Key="FluentScrollBarForegroundHover" Color="#656565" />
+								</ResourceDictionary>
+								<ResourceDictionary Source="Button.xaml" />
+								<ResourceDictionary Source="Checkbox.xaml" />
+								<ResourceDictionary Source="ContextMenu.xaml" />
+								<ResourceDictionary Source="NavigationViewItem_style.xaml" />
+								<ResourceDictionary Source="ScrollBar.xaml" />
+								<ResourceDictionary Source="Slider.xaml" />
+								<ResourceDictionary Source="HyperlinkButton.xaml" />
+								<ResourceDictionary Source="Typography.xaml" />
+								<ResourceDictionary Source="Icon.xaml" />
+				</ResourceDictionary.MergedDictionaries>
+				
+</ResourceDictionary>

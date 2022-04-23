@@ -1,0 +1,59 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+				<Style TargetType="Button">
+								<Setter Property="Background" Value="White" />
+								<Setter Property="Padding" Value="10,5,10,5" />
+								<Setter Property="BorderBrush" Value="{DynamicResource FluentBorderColor}" />
+								<Setter Property="Template">
+												<Setter.Value>
+																<ControlTemplate TargetType="Button">
+																				<Border x:Name="borderBackground" CornerRadius="4" BorderThickness="1" BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
+																								<VisualStateManager.VisualStateGroups>
+																												<VisualStateGroup Name="CommonStates">
+																																<VisualState Name="Normal">
+																																				<Storyboard>
+																																								<ColorAnimation
+																																												Storyboard.TargetName="borderBackground"
+																																												Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+																																												To="{TemplateBinding Background}"
+																																												Duration="0:0:0:0.2"
+																																												/>
+																																				</Storyboard>
+																																</VisualState>
+																																<VisualState Name="MouseOver">
+																																				<Storyboard>
+																																								<ColorAnimation
+																																												Storyboard.TargetName="borderBackground"
+																																												Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+																																												To="#FBFBFB"
+																																												Duration="0:0:0:0.2"
+																																												/>
+																																				</Storyboard>
+																																</VisualState>
+																																<VisualState Name="Pressed">
+																																				<Storyboard>
+																																								<DoubleAnimation
+																																												Storyboard.TargetName="borderBackground"
+																																												Storyboard.TargetProperty="Opacity"
+																																												To="0.6"
+																																												Duration="0:0:0:0"
+																																												/>
+																																								<ColorAnimation
+																																												Storyboard.TargetName="borderBackground"
+																																												Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+																																												To="#F9F9F9"
+																																												Duration="0:0:0:0.2"
+																																												/>
+																																				</Storyboard>
+																																</VisualState>
+																												</VisualStateGroup>
+																								</VisualStateManager.VisualStateGroups>
+																								<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+																				</Border>
+																</ControlTemplate>
+												</Setter.Value>
+								</Setter>
+				</Style>
+
+</ResourceDictionary>

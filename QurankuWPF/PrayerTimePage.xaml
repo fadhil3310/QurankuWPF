@@ -1,0 +1,99 @@
+﻿<Page x:Class="QurankuWPF.PrayerTimePage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:QurankuWPF"
+						xmlns:res="clr-namespace:QurankuWPF.Properties"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="PrayerTimePage">
+
+				<Grid>
+								<Grid.ColumnDefinitions>
+												<ColumnDefinition Width="*" />
+								</Grid.ColumnDefinitions>
+								<Grid.RowDefinitions>
+												<RowDefinition Height="*" />
+								</Grid.RowDefinitions>
+								
+								<StackPanel x:Name="locationNotSpecifiedPanel" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Visibility="Visible">
+												<Path HorizontalAlignment="Center" Width="48" Height="48" Fill="{DynamicResource AccentColorBrush}" Data="{StaticResource GlobeIcon}" Stretch="Fill" />
+												<Label HorizontalAlignment="Center" Content="{x:Static res:Language.NoLocationSpecified}" />
+												<Button x:Name="findLocationFirstTimeButton" HorizontalAlignment="Center" Click="findLocationFirstTime_Click" Content="{x:Static res:Language.FindLocation}"/>
+								</StackPanel>
+								
+								<Grid x:Name="prayerTimePanel" Grid.Column="0" Grid.Row="0" Visibility="Collapsed">
+												<Grid.ColumnDefinitions>
+																<ColumnDefinition Width="*" />
+												</Grid.ColumnDefinitions>
+												<Grid.RowDefinitions>
+																<RowDefinition Height="Auto" />
+																<RowDefinition Height="*" />
+												</Grid.RowDefinitions>
+
+												<Grid Grid.Column="0" Grid.Row="0">
+																<TextBlock HorizontalAlignment="Left" Text="{x:Static res:Language.PrayerTimePageTitle}" Style="{DynamicResource FluentHeading1}" Margin="32,24,0,0" />
+																<Button Content="{x:Static res:Language.ChangeLocation}" HorizontalAlignment="Right" Margin="0,32,12,0" VerticalAlignment="Top"/>
+												</Grid>
+
+												<ScrollViewer Grid.Column="0" Grid.Row="1">
+																<Border Style="{DynamicResource PrayTimeCard}">
+																				<StackPanel>
+																								<Grid Style="{DynamicResource PrayTimeCardItem}">
+																												<Grid.ColumnDefinitions>
+																																<ColumnDefinition Width="Auto" />
+																																<ColumnDefinition Width="*" />
+																																<ColumnDefinition Width="Auto" />
+																												</Grid.ColumnDefinitions>
+																												<Path Grid.Column="0" Fill="{DynamicResource FluentForegroundColor}" Data="{StaticResource ShubuhIcon}" />
+																												<TextBlock Grid.Column="1" Style="{DynamicResource PrayTimeCardItemTimeName}" Text="{x:Static res:Language.Shubuh}" />
+																												<TextBlock x:Name="shubuhTime" Grid.Column="2" Text="04:24" VerticalAlignment="Center" FontSize="16" />
+																								</Grid>
+																								<Grid Style="{DynamicResource PrayTimeCardItem}">
+																												<Grid.ColumnDefinitions>
+																																<ColumnDefinition Width="Auto" />
+																																<ColumnDefinition Width="*" />
+																																<ColumnDefinition Width="Auto" />
+																												</Grid.ColumnDefinitions>
+																												<Path Grid.Column="0" Fill="{DynamicResource FluentForegroundColor}" Data="{StaticResource DhuhrIcon}" />
+																												<TextBlock Grid.Column="1" Style="{DynamicResource PrayTimeCardItemTimeName}" Text="{x:Static res:Language.Dhuhr}" />
+																												<TextBlock x:Name="DhuhrTime" Grid.Column="2" Text="04:24" VerticalAlignment="Center" FontSize="16" />
+																								</Grid>
+																								<Grid Style="{DynamicResource PrayTimeCardItem}">
+																												<Grid.ColumnDefinitions>
+																																<ColumnDefinition Width="Auto" />
+																																<ColumnDefinition Width="*" />
+																																<ColumnDefinition Width="Auto" />
+																												</Grid.ColumnDefinitions>
+																												<Path Grid.Column="0" Fill="{DynamicResource FluentForegroundColor}" Data="{StaticResource AsrIcon}" />
+																												<TextBlock Grid.Column="1" Style="{DynamicResource PrayTimeCardItemTimeName}" Text="{x:Static res:Language.Asr}" />
+																												<TextBlock x:Name="asrTime" Grid.Column="2" Text="04:24" VerticalAlignment="Center" FontSize="16" />
+																								</Grid>
+																								<Grid Style="{DynamicResource PrayTimeCardItem}">
+																												<Grid.ColumnDefinitions>
+																																<ColumnDefinition Width="Auto" />
+																																<ColumnDefinition Width="*" />
+																																<ColumnDefinition Width="Auto" />
+																												</Grid.ColumnDefinitions>
+																												<Path Grid.Column="0" Fill="{DynamicResource FluentForegroundColor}" Data="{StaticResource MaghribIcon}" />
+																												<TextBlock Grid.Column="1" Style="{DynamicResource PrayTimeCardItemTimeName}" Text="{x:Static res:Language.Maghrib}" />
+																												<TextBlock x:Name="maghribTime" Grid.Column="2" Text="04:24" VerticalAlignment="Center" FontSize="16" />
+																								</Grid>
+																								<Grid Style="{DynamicResource PrayTimeCardItem}">
+																												<Grid.ColumnDefinitions>
+																																<ColumnDefinition Width="Auto" />
+																																<ColumnDefinition Width="*" />
+																																<ColumnDefinition Width="Auto" />
+																												</Grid.ColumnDefinitions>
+																												<Path Grid.Column="0" Fill="{DynamicResource FluentForegroundColor}" Data="{StaticResource IshaIcon}" />
+																												<TextBlock Grid.Column="1" Style="{DynamicResource PrayTimeCardItemTimeName}" Text="{x:Static res:Language.Isha}" />
+																												<TextBlock x:Name="ishaTime" Grid.Column="2" Text="04:24" VerticalAlignment="Center" FontSize="16" />
+																								</Grid>
+																				</StackPanel>
+																</Border>
+																
+												</ScrollViewer>
+								</Grid>
+				</Grid>
+</Page>
