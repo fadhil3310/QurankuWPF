@@ -115,7 +115,7 @@ namespace QurankuWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to We&apos;re sorry, there is a problem when we try to find your location. Please make sure to enable &quot;Location&quot; on your device and Quranku is given access to your location in Settings..
+        ///   Looks up a localized string similar to We&apos;re sorry, there is a problem when we tried to find your location. Please make sure to enable &quot;Location&quot; on your device and Quranku is given access to your location in Settings..
         /// </summary>
         public static string FindLocationDenied {
             get {

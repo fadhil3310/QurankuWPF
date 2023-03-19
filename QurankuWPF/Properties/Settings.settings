@@ -5,5 +5,8 @@
     <Setting Name="language" Type="System.String" Scope="Application">
       <Value Profile="(Default)">id-ID</Value>
     </Setting>
+    <Setting Name="location" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>

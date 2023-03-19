@@ -23,6 +23,7 @@ namespace QurankuWPF
 				public SettingsPage()
 				{
 						InitializeComponent();
+						
 				}
 		}
 }

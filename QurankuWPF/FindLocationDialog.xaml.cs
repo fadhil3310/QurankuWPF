@@ -11,7 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using Windows.Devices.Geolocation;
+using Batoulapps.Adhan;
 using Windows.System;
 
 namespace QurankuWPF
@@ -21,57 +21,49 @@ namespace QurankuWPF
 		/// </summary>
 		public partial class FindLocationDialog : Window
 		{
-				private Func<QGeoposition, int> callback; 
+				private Coordinates coordinates = new Coordinates(0, 0);
+				private Action<Coordinates> callback; 
 
-				public FindLocationDialog(Func<QGeoposition, int> _callback)
+				public enum DialogAction
+				{
+						NO_PERMISSION,
+						MANUAL
+				};
+
+				public FindLocationDialog(DialogAction action, Action<Coordinates> _callback)
 				{
 						InitializeComponent();
 
 						callback = _callback;
 
-						if (OperatingSystem.IsWindowsVersionAtLeast(10, 0, 1024, 0))
+						switch (action)
 						{
-								findLocationAuto();
-						}
-				}
-
-				public async void findLocationAuto()
-				{
-						var accessStatus = await Geolocator.RequestAccessAsync();
-						switch (accessStatus)
-						{
-								case GeolocationAccessStatus.Allowed:
-										findLocationAutoGrid.Visibility = Visibility.Visible;
-										Geolocator geolocator = new Geolocator();
-										Geoposition geoposition = await geolocator.GetGeopositionAsync();
-										callback(new QGeoposition(geoposition.Coordinate.Point.Position.Latitude, geoposition.Coordinate.Point.Position.Longitude));
-										Close();
-										break;
-								case GeolocationAccessStatus.Denied:
+								case DialogAction.NO_PERMISSION:
 										Width = 600; Height = 460;
 										findLocationAutoDeniedGrid.Visibility = Visibility.Visible;
 										break;
-								case GeolocationAccessStatus.Unspecified:
-										
-										break;
 						}
-
 				}
 
 				private void openSettingsButton_Click(object sender, RoutedEventArgs e)
 				{
 						Launcher.LaunchUriAsync(new Uri("ms-settings:privacy-location"));
 				}
+
+				private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+				{
+						callback(coordinates);
+				}
 		}
 
-		public class QGeoposition { 
+		/* public class QurankuGeoposition { 
 				public double latitude { get; set; }
 				public double longitude { get; set; }
 
-				public QGeoposition(double _latitude, double _longitude)
+				public QurankuGeoposition(double _latitude, double _longitude)
 				{
 						latitude = _latitude;
 						longitude = _longitude;
 				}
-		}
+		} */
 }

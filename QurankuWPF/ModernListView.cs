@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -18,15 +20,87 @@ namespace QurankuWPF
 		/// <summary>
 		/// Control to implement RecyclerView-like in WPF, still imperfect but usable
 		/// </summary>
-		public partial class RecyclerList : UserControl
+		
+		public partial class ModernListScrollView : Panel
 		{
-				public Func<int, StackPanel> itemControl;
+				private List<Rect> ChildrenRect = new List<Rect>();
 
+				// Measure item size
+				protected override Size MeasureOverride(Size availableSize)
+				{
+						Size desiredSize = new Size();
+
+						for (int i = 0; i < InternalChildren.Count; i++)
+						{
+								UIElement child = InternalChildren[i];
+								child.Measure(availableSize);
+
+								desiredSize.Width = child.DesiredSize.Width;
+								desiredSize.Height += child.DesiredSize.Height;
+								ChildrenRect.Insert(i, new Rect(0, 0, child.DesiredSize.Width, child.DesiredSize.Height));
+						}
+						return desiredSize;
+				}
+
+				// Arrange item in list
+				protected override Size ArrangeOverride(Size finalSize)
+				{
+						double childHeightBefore = 0;
+
+						for (int i = 0; i < InternalChildren.Count; i++)
+						{
+								var child = InternalChildren[i];
+								double childHeight = ChildrenRect[i].Height;
+
+								child.Arrange(new Rect(new Point(0, childHeight + childHeightBefore), child.DesiredSize));
+
+								childHeightBefore += childHeight;
+						}
+						return finalSize;
+				}
+
+				public void InsertItem(int index, FrameworkElement control)
+				{
+						Children.Add(control);
+
+						/*if (isInitializing) waitForItem = true;
+						else
+						{
+								//if (stackPanelTranslate.Y - templateRoot.ActualHeight < lastChildBottomY) CreateItem(index);
+						}*/
+
+						//debugWindow1.AddItem(index);
+
+						//writeLine("Done adding item, IsInitializing: " + isInitializing + " , itemNeedMeasurement: " + itemNeedMeasurement);
+				}
+		}
+
+		public partial class ModernListView : Panel
+		{
+				DebugWindow debug = new DebugWindow();
+
+				// List view adapter
+				public IRecyclerListAdapter Adapter {
+						get => _adapter;
+						set {
+								_adapter = value;
+								for(int i = 0; i < _adapter.GetItemCount(); i++)
+								{
+										scrollView.InsertItem(i, _adapter.GetItem(i));
+								}
+						}
+				}
+
+				private IRecyclerListAdapter _adapter;
+
+				private ModernListScrollView scrollView;
+
+				/*// States
 				Boolean isInitializing = true;
 				Boolean scrollable;
 				Boolean isScrollableInitialized = false;
 				double maximumTranslateY = 0;
-				List<RecyclerListItem> items = new List<RecyclerListItem>();
+
 				//List<RecyclerViewItem> visibleItems = new List<RecyclerViewItem>();
 
 				// For calculation purpose
@@ -50,20 +124,7 @@ namespace QurankuWPF
 				Label debugText2;
 				DebugWindow1 debugWindow1;
 
-				public RecyclerList()
-				{
-						InitializeComponent();
-
-						/*DebugWindow debugWindow = new DebugWindow();
-						debugWindow.Show();
-						debugListBox = debugWindow.listBox;
-						debugText = debugWindow.additionalDebugText;
-						debugText1 = debugWindow.additionalDebugText1;
-						debugText2 = debugWindow.additionalDebugText2;
-
-						debugWindow1 = new DebugWindow1();
-						debugWindow1.Show();*/
-				}
+				public ModernListView() : base() { }
 
 				/*private void writeLine(string text)
 				{
@@ -87,49 +148,71 @@ namespace QurankuWPF
 						debugListBox.ScrollIntoView(listBoxItem);
 				}*/
 
-				public void AddItem()
+				public ModernListView()
 				{
-						int index = items.Count;
-						//writeLine("Start adding item, index: " + items.Count);
-						items.Add(new RecyclerListItem(index));
+						debug.Show();
 
-						if (isInitializing) waitForItem = true;
-						else
-						{	
-								if (stackPanelTranslate.Y - templateRoot.ActualHeight < lastChildBottomY) CreateItem(index);
-						}
-
-						//debugWindow1.AddItem(index);
-
-						//writeLine("Done adding item, IsInitializing: " + isInitializing + " , itemNeedMeasurement: " + itemNeedMeasurement);
+						scrollView = new ModernListScrollView();
+						InternalChildren.Add(scrollView);
+						InternalChildren.Add(new ScrollBar());
 				}
 
-				private void CreateItem(int index, Boolean _itemNeedMeasurement = true)
+				protected override Size MeasureOverride(Size availableSize)
 				{
-						//writeLine("Start creating item, index: " + index);
-						itemNeedMeasurement = _itemNeedMeasurement;
+						Size desiredSize = new Size();
 
-						StackPanel control = itemControl(index);
-						stackPanel.Children.Add(control);
-						items[index].Control = control;
-						items[index].HasBeenAdded = true;
+						InternalChildren[0].Measure(availableSize);
+						InternalChildren[1].Measure(availableSize);
 
-						//debugWindow1.ChangeStatus(index, "created");
+						desiredSize.Width = availableSize.Width;
+						desiredSize.Height = availableSize.Height;
 
-						//writeLine("Done creating item");
+						
+
+						return desiredSize;
+				}
+
+				protected override Size ArrangeOverride(Size finalSize)
+				{
+						var _scrollView = InternalChildren[0];
+						var _scrollBar = InternalChildren[1];
+
+						_scrollView.Arrange(new Rect(0, 0, finalSize.Width, finalSize.Height));
+						_scrollBar.Arrange(new Rect(
+								finalSize.Width - _scrollBar.DesiredSize.Width,
+								0,
+								_scrollBar.DesiredSize.Width,
+								_scrollBar.DesiredSize.Height
+								));
+						
+						return finalSize;
+				}
+				private void OnGotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+				{
+						debug.Log("Key focus");
+				}
+
+
+
+				private void OnButtonKeyDown(object sender, KeyEventArgs e) {
+						if (e.Key == Key.Enter)
+						{
+								debug.Log("Key down");
+								InternalChildren[0].RenderTransform = new TranslateTransform(0, 20);
+						}
 				}
 
 				private void calculateMaximumTranslateY()
 				{
 						//writeLine("Start calculating maximumTranslateY");
-						maximumTranslateY = Math.Floor(-stackPanel.ActualHeight - -templateRoot.ActualHeight) - 1;
+						//maximumTranslateY = Math.Floor(-stackPanel.ActualHeight - -templateRoot.ActualHeight) - 1;
 						//debug.Content = "Calculated " + maximumTranslateY;
-						verticalScrollBar.Maximum = -maximumTranslateY;
+						//verticalScrollBar.Maximum = -maximumTranslateY;
 						//writeLine("Done calculating maximumTranslateY: " + maximumTranslateY + ", scrollBarEnabled: " + verticalScrollBar.IsEnabled);
 						//calculated++;
 				}
 
-				private void checkIsScrollable()
+				/*private void checkIsScrollable()
 				{
 						//writeLine("Start checking is scrollable");
 						if (stackPanel.ActualHeight > templateRoot.ActualHeight)
@@ -158,14 +241,6 @@ namespace QurankuWPF
 						}
 				}
 
-				private void scrollBy(double translateY)
-				{
-
-						stackPanelTranslate.Y += translateY;
-
-						//writeLine(translateY.ToString());
-				}
-
 				private void stackPanel_MouseWheel(object sender, MouseWheelEventArgs e)
 				{
 						if (scrollable)
@@ -179,7 +254,7 @@ namespace QurankuWPF
 
 										if (translateY + acceleration > 0)
 										{
-												acceleration = acceleration - (acceleration + translateY);
+												//acceleration = acceleration - (acceleration + translateY);
 										}
 
 										//scrollBy(acceleration);
@@ -195,7 +270,7 @@ namespace QurankuWPF
 
 										if (translateY + acceleration < maximumTranslateY)
 										{
-												acceleration = acceleration - (acceleration - (maximumTranslateY - translateY));
+												//acceleration = acceleration - (acceleration - (maximumTranslateY - translateY));
 										}
 
 										//scrollBy(acceleration);
@@ -251,7 +326,8 @@ namespace QurankuWPF
 										}
 										else //writeLine("Index is 0, skipping measurement");
 
-										if (waitForItemIndex == items.Count - 1) {
+										if (waitForItemIndex == items.Count - 1)
+										{
 												waitForItemMaxed = true;
 										}
 
@@ -273,7 +349,7 @@ namespace QurankuWPF
 
 										waitForItem = false;
 								}
-								
+
 								//writeLine("> Done waitForItem");
 						}
 
@@ -298,7 +374,7 @@ namespace QurankuWPF
 												firstChildTopY = items[firstChildIndex].TopY;
 												firstChildBottomY = items[firstChildIndex].BottomY;
 										}*/
-										CreateItem(lastChildIndex + 1);
+										/*CreateItem(lastChildIndex + 1);
 								}
 								else
 								{
@@ -309,7 +385,7 @@ namespace QurankuWPF
 										checkIsScrollable();
 								}
 
-								
+
 								//writeLine("Done measuring, lastChildTopY: " + lastChildTopY + " lastChildBottomY: " + lastChildBottomY);
 						}
 				}
@@ -329,7 +405,7 @@ namespace QurankuWPF
 								itemsHeight.Add(item.ActualHeight);
 								itemNeedMeasurement = false;
 						}*/
-				}
+				/*}
 
 				int rootCal = 0;
 				private void templateRoot_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -434,9 +510,9 @@ namespace QurankuWPF
 								}
 								else endCheckingUpLowermost = true;
 						}*/
-						
+
 						//scrollBy(-e.NewValue);
-				}
+				//}
 
 				private class RecyclerListItem
 				{
@@ -455,6 +531,8 @@ namespace QurankuWPF
 
 		public interface IRecyclerListAdapter
 		{
-				public StackPanel IRecyclerViewItem(int _index);
+				public int GetItemCount();
+
+				public FrameworkElement GetItem(int index);
 		}
 }

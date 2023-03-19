@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace QurankuWPF
 {
@@ -28,10 +29,26 @@ namespace QurankuWPF
 						Left = SystemParameters.WorkArea.Right - Width;
 				}
 
-				public void AddItem(string text)
+				public void Log(string message)
 				{
 						ListBoxItem listBoxItem = new ListBoxItem();
-						listBoxItem.Content = text;
+						listBoxItem.Content = message;
+						listBox.Items.Add(listBoxItem);
+						listBox.ScrollIntoView(listBoxItem);
+				}
+
+				public void Log(int message)
+				{
+						ListBoxItem listBoxItem = new ListBoxItem();
+						listBoxItem.Content = message.ToString();
+						listBox.Items.Add(listBoxItem);
+						listBox.ScrollIntoView(listBoxItem);
+				}
+
+				public void Log(Boolean message)
+				{
+						ListBoxItem listBoxItem = new ListBoxItem();
+						listBoxItem.Content = message.ToString();
 						listBox.Items.Add(listBoxItem);
 						listBox.ScrollIntoView(listBoxItem);
 				}

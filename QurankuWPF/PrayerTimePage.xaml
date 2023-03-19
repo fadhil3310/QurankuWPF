@@ -34,7 +34,7 @@
 
 												<Grid Grid.Column="0" Grid.Row="0">
 																<TextBlock HorizontalAlignment="Left" Text="{x:Static res:Language.PrayerTimePageTitle}" Style="{DynamicResource FluentHeading1}" Margin="32,24,0,0" />
-																<Button Content="{x:Static res:Language.ChangeLocation}" HorizontalAlignment="Right" Margin="0,32,12,0" VerticalAlignment="Top"/>
+																<Button x:Name="changeLocationButton" Content="{x:Static res:Language.ChangeLocation}" Click="changeLocationButton_Click" HorizontalAlignment="Right" Margin="0,32,12,0" VerticalAlignment="Top"/>
 												</Grid>
 
 												<ScrollViewer Grid.Column="0" Grid.Row="1">
@@ -58,7 +58,7 @@
 																												</Grid.ColumnDefinitions>
 																												<Path Grid.Column="0" Fill="{DynamicResource FluentForegroundColor}" Data="{StaticResource DhuhrIcon}" />
 																												<TextBlock Grid.Column="1" Style="{DynamicResource PrayTimeCardItemTimeName}" Text="{x:Static res:Language.Dhuhr}" />
-																												<TextBlock x:Name="DhuhrTime" Grid.Column="2" Text="04:24" VerticalAlignment="Center" FontSize="16" />
+																												<TextBlock x:Name="dhuhrTime" Grid.Column="2" Text="04:24" VerticalAlignment="Center" FontSize="16" />
 																								</Grid>
 																								<Grid Style="{DynamicResource PrayTimeCardItem}">
 																												<Grid.ColumnDefinitions>

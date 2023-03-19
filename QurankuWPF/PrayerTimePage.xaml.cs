@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Batoulapps.Adhan;
+using Batoulapps.Adhan.Internal;
 
 namespace QurankuWPF
 {
@@ -25,22 +27,68 @@ namespace QurankuWPF
 				{
 						InitializeComponent();
 						parent = _parent;
+
+						if (QurankuWPF.Properties.Settings.Default.location != "")
+						{
+								locationNotSpecifiedPanel.Visibility = Visibility.Collapsed;
+								prayerTimePanel.Visibility = Visibility.Visible;
+
+								string[] location = QurankuWPF.Properties.Settings.Default.location.Split(" ");
+
+								calculatePrayerTime(new Coordinates(double.Parse(location[0]), double.Parse(location[1])));
+						}
 				}
 
 				private void findLocationFirstTime_Click(object sender, RoutedEventArgs e)
 				{
-						FindLocationDialog findLocationDialog = new FindLocationDialog(delegate
+						findLocation();
+				}
+
+				private void findLocation()
+				{
+						FindLocation.GetLocation((position) =>
 						{
-								return 0;
+								if (position.Latitude == 0 && position.Longitude == 0)
+										return;
+
+								locationNotSpecifiedPanel.Visibility = Visibility.Collapsed;
+								prayerTimePanel.Visibility = Visibility.Visible;
+
+								locationUpdated(position);
 						});
-						findLocationDialog.Top = parent.Top + (parent.Height / 2) - (findLocationDialog.Height / 2);
-						findLocationDialog.Left = parent.Left + (parent.Width / 2) - (findLocationDialog.Width / 2);
-						findLocationDialog.ShowDialog();
+				}
+
+				private void calculatePrayerTime(Coordinates location)
+				{
+						DateComponents date = DateComponents.From(DateTime.Now);
+						CalculationParameters parameters = CalculationMethod.SINGAPORE.GetParameters();
+						parameters.Madhab = Madhab.SHAFI;
+
+						PrayerTimes prayerTimes = new PrayerTimes(location, date, parameters);
+
+						TimeZoneInfo timeZone = TimeZoneInfo.Local;
+						shubuhTime.Text = prayerTimes.Fajr.ToLocalTime().ToShortTimeString();
+						dhuhrTime.Text = prayerTimes.Dhuhr.ToLocalTime().ToShortTimeString();
+						asrTime.Text = prayerTimes.Asr.ToLocalTime().ToShortTimeString();
+						maghribTime.Text = prayerTimes.Maghrib.ToLocalTime().ToShortTimeString();
+						ishaTime.Text = prayerTimes.Isha.ToLocalTime().ToShortTimeString();
 				}
 
 				private void findLocationButton_Click(object sender, RoutedEventArgs e)
 				{
 						//prayerTimePanel.Visibility = Visibility.Collapsed;
+				}
+				private void locationUpdated(Coordinates location)
+				{
+						QurankuWPF.Properties.Settings.Default.location = location.Latitude + " " + location.Longitude;
+						QurankuWPF.Properties.Settings.Default.Save();
+
+						calculatePrayerTime(location);
+				}
+
+				private void changeLocationButton_Click(object sender, RoutedEventArgs e)
+				{
+						findLocation();
 				}
 		}
 }

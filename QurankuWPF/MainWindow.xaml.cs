@@ -16,6 +16,7 @@ using System.Windows.Shapes;
 using Windows.ApplicationModel.Core;
 using Windows.Devices.Geolocation;
 
+
 namespace QurankuWPF
 {
 		/// <summary>
@@ -36,83 +37,16 @@ namespace QurankuWPF
 				{
 						InitializeComponent();
 
+						// new Baru().Show();
+
 						navigationView.AddItem(bookPath);
 						navigationView.AddItem(clockPath);
 
 						quranPage = new QuranPage();
 						frame.Navigate(quranPage);
 
-						//debugWindow = new DebugWindow();
-						//debugWindow.Show();
 
-						/*recyclerView.itemControl = index => {
-								StackPanel itemRoot = new StackPanel();
-								itemRoot.Background = new SolidColorBrush(Colors.AntiqueWhite);
-								Label label = new Label();
-								label.Content = "abc " + index;
-								itemRoot.Children.Add(label);
-								return itemRoot;
-						};
-
-						//storyboard.Begin();
-
-						for (items = 0; items < 15; items++)
-						{
-								recyclerView.AddItem();
-								/*StackPanel viewHolder = new StackPanel();
-								viewHolder.Orientation = Orientation.Horizontal;
-								Label label = new Label();
-								label.Content = "abc " + i;
-								viewHolder.Children.Add(label);
-								stackPanel.Children.Add(viewHolder);
-						}*/
-
-						//ThemeManager.Current.ApplicationTheme = ApplicationTheme.Dark;
-						//Background = new SolidColorBrush(Colors.Black);
-
-						//getLocationAsync();
-						//frame.Navigate(new Page1());
-						//var coreTitleBar = 
 				}
-
-				/*private async Task<Geoposition> getLocationAsync()
-				{
-						var accessStatus = await Geolocator.RequestAccessAsync();
-						Geoposition geoposition = null;
-						switch (accessStatus)
-						{
-								case GeolocationAccessStatus.Allowed:
-										var geolocator = new Geolocator();
-										geoposition = await geolocator.GetGeopositionAsync();
-										ContentDialog dialog = new ContentDialog
-										{
-												Title = "Result",
-												Content = geoposition.Coordinate.Longitude,
-												CloseButtonText = "Close"
-										};
-										await dialog.ShowAsync();
-										break;
-								case GeolocationAccessStatus.Denied:
-										ContentDialog dialog1 = new ContentDialog
-										{
-												Title = "Access Denied",
-												Content = "We can't access your location. Please check your location setting in Windows Settings.",
-												CloseButtonText = "Close"
-										};
-										await dialog1.ShowAsync();
-										break;
-								case GeolocationAccessStatus.Unspecified:
-										ContentDialog dialog2 = new ContentDialog
-										{
-												Title = "Unknown Error",
-												Content = "An error happened when trying to access your location.",
-												CloseButtonText = "Close"
-										};
-										await dialog2.ShowAsync();
-										break;
-						}
-						return geoposition;
-				}*/
 
 				private void Button_Click(object sender, RoutedEventArgs e)
 				{
@@ -126,14 +60,16 @@ namespace QurankuWPF
 						//recyclerView.AddItem();
 				}
 
-				private class TestItem : IRecyclerListAdapter
+				/*private class TestItem : IRecyclerListAdapter
 				{
-						public StackPanel IRecyclerViewItem(int _index)
+						public StackPanel GetItem(int index)
 						{
 								StackPanel itemRoot = new StackPanel();
 								return itemRoot;
 						}
-				}
+
+						public int GetItemCount() => 10;
+				}*/
 
 				private void navigationView_SelectionChanged(object sender, RoutedEventArgs e)
 				{
@@ -153,6 +89,11 @@ namespace QurankuWPF
 										frame.Navigate(prayerTimePage);
 										break;
 						}
+				}
+
+				private void Window_Loaded(object sender, RoutedEventArgs e)
+				{
+						
 				}
 		}
 }
